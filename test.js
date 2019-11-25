@@ -263,9 +263,9 @@ function kiemTraTinhMatMat(r, fs, rx){
         }
     }
     for(let i=0; i<rx.length; i++){
-        if(checkTrue(table[i])) return false;
+        if(checkTrue(table[i])) return true;
     }
-    return true;
+    return false;
 }
 
 function index(e, s){
@@ -286,9 +286,9 @@ function checkEqual(arr1, arr2, index){
 
 function checkTrue(arr){
     for(let i=0; i<arr.length; i++){
-        if(!arr[i]) return true;
+        if(!arr[i]) return false;
     }
-    return false;
+    return true;
 }
 
 console.log(timBaoDong('A->B,C->D,B->C',''));
