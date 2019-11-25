@@ -286,9 +286,9 @@ function checkEqual(arr1, arr2, index){
 
 function checkTrue(arr){
     for(let i=0; i<arr.length; i++){
-        if(!arr[i]) return false;
+        if(!arr[i]) return true;
     }
-    return true;
+    return false;
 }
 
 console.log(timBaoDong('A->B,C->D,B->C',''));
