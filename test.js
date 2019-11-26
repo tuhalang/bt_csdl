@@ -34,8 +34,9 @@ function changeBtn(index){
 $('#compute-tbd').click( _ => {
     let txtAttributes = $('#attributes-tbd').val();
     let txtFunctions = $('#functions-tbd').val();
-    
-    const rs = timBaoDong(txtFunctions,'');
+    let init = $('#init-tbd').val();
+
+    const rs = timBaoDong(txtFunctions,init);
     $('#rs-lable').text(rs);
 });
 
@@ -92,20 +93,22 @@ $('#compute-kttkmm').click( _ => {
 function timBaoDong(fs, rs=''){
     fs = fs.split(',');
     fs.sort();
-    fs.forEach(f => {
-        const Y = f.split('->')[0];
-        const Z = f.split('->')[1];
-        if(rs == '')
-            rs+=Y+Z;
-        else
-            if(includes(Y,rs)){
-                for (let i=0; i<Z.length; i++) {
-                    if(!rs.includes(Z[i])){
-                        rs+=Z[i];
+    for(let i=0; i<fs.length; i++){
+        fs.forEach(f => {
+            const Y = f.split('->')[0];
+            const Z = f.split('->')[1];
+            if(rs == '')
+                rs+=Y+Z;
+            else
+                if(includes(Y,rs)){
+                    for (let i=0; i<Z.length; i++) {
+                        if(!rs.includes(Z[i])){
+                            rs+=Z[i];
+                        }
                     }
                 }
-            }
-    })
+        })
+    }
     return rs;
 }
 
@@ -236,31 +239,34 @@ function kiemTraTinhMatMat(r, fs, rx){
         table.push(row);
     }
     fs = fs.split(',')
-    for(let i=0; i<fs.length; i++){
-        let Y = fs[i].split('->')[0];
-        let Z = fs[i].split('->')[1];
-        let indexY = index(Y,r);
-        let tmp = [];
-        for(let j=0; j<rx.length-1; j++){
-            for(let k=1; k<rx.length; k++){
-                if(checkEqual(table[j],table[k],indexY)){
-                    tmp.push(j);
-                    tmp.push(k);
-
-                    let indexZ = index(Z,r);
-                    for(let j=0; j<indexZ.length; j++){
-                        let rs=false;
-                        for(let k=0; k<rx.length; k++){
-                            if(tmp.includes(k)) rs = rs || table[k][indexZ[j]];
+    for(let h=0; h<fs.length; h++){
+        for(let i=0; i<fs.length; i++){
+            let Y = fs[i].split('->')[0];
+            let Z = fs[i].split('->')[1];
+            let indexY = index(Y,r);
+            let tmp = [];
+            for(let j=0; j<rx.length-1; j++){
+                for(let k=1; k<rx.length; k++){
+                    if(checkEqual(table[j],table[k],indexY)){
+                        tmp.push(j);
+                        tmp.push(k);
+    
+                        let indexZ = index(Z,r);
+                        for(let j=0; j<indexZ.length; j++){
+                            let rs=false;
+                            for(let k=0; k<rx.length; k++){
+                                if(tmp.includes(k)) rs = rs || table[k][indexZ[j]];
+                            }
+                            for(let k=0; k<rx.length; k++){
+                                if(tmp.includes(k)) table[k][indexZ[j]]=rs;
+                            }
                         }
-                        for(let k=0; k<rx.length; k++){
-                            if(tmp.includes(k)) table[k][indexZ[j]]=rs;
-                        }
+                        tmp = [];
                     }
-                    tmp = [];
                 }
             }
-        }
+    }
+    
     }
     for(let i=0; i<rx.length; i++){
         if(checkTrue(table[i])) return true;
